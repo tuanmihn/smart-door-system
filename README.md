@@ -1,7 +1,6 @@
 # KHÓA CỬA THÔNG MINH 2 LỚP – VÂN TAY + KHUÔN MẶT
 
 **Đề tài:** Xây dựng hệ thống khóa cửa bảo mật cao sử dụng xác thực sinh trắc học 2 lớp (2FA)  
-**Mục tiêu:** Chỉ mở cửa khi **cả vân tay và khuôn mặt cùng đúng của một người**
 
 ---
 
