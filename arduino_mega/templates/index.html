@@ -114,10 +114,7 @@
         </div>
         <div id="face" class="status wait">
           <span>Khuôn mặt: Chưa nhận diện</span>
-          <button id="btnFace" class="btn btn-warning btn-action mb-2">
-            <span class="spinner spinner-border spinner-border-sm me-2"></span>
-            <i class="fas fa-camera"></i> Nhận Diện Khuôn Mặt
-          </button>
+          <button id="btnFace" class="btn-primary">Nhận Diện Khuôn Mặt</button>
         </div>
         <div id="door" class="status error">Cửa: Đóng</div>
         <div id="log" class="log"></div>
@@ -164,59 +161,32 @@
         fetch("/status")
           .then((r) => r.json())
           .then((data) => {
-            // === VÂN TAY ===
-            const fpText = document.getElementById("fingerprintText");
-            const fpBox = document.getElementById("fingerprintStatus");
-            fpText.textContent = data.fingerprint;
-            fpBox.className = data.fingerprint.includes("Đúng")
-              ? "status-box status-success"
-              : "status-box status-pending";
+            document.getElementById(
+              "fingerprint"
+            ).firstElementChild.textContent = "Vân tay: " + data.fingerprint;
+            document.getElementById("face").firstElementChild.textContent =
+              "Khuôn mặt: " + data.face;
+            document.getElementById("door").textContent = "Cửa: " + data.door;
+            document.getElementById("log").textContent = data.last_log;
 
-            // === KHUÔN MẶT ===
-            const faceText = document.getElementById("faceText");
-            const faceBox = document.getElementById("faceStatus");
-            faceText.textContent = data.face;
-            faceBox.className = data.face.includes("Đúng")
-              ? "status-box status-success"
-              : data.face.includes("SAI")
-              ? "status-box status-failed"
-              : "status-box status-pending";
+            // Danh sách người dùng
+            const users = Array.isArray(data.users) ? data.users : [];
+            document.getElementById("userList").innerHTML =
+              users.length > 0
+                ? users.map((u) => `• ${u}`).join("<br>")
+                : "Chưa có ai";
 
-            // === CỬA ===
-            const doorText = document.getElementById("doorText");
-            const doorBox = document.getElementById("doorStatus");
-            const isOpen = data.door === "Mở";
-            doorText.textContent = data.door;
-            doorBox.innerHTML = `<i class="fas fa-${
-              isOpen ? "door-open" : "door-closed"
-            } fa-2x mb-2"></i><div>${data.door}</div>`;
-            doorBox.className = isOpen
-              ? "status-box status-success"
-              : "status-box status-pending";
-
-            // === ẨN/HIỆN NÚT "NHẬN DIỆN MẶT" ===
-            // const btnFace = document.getElementById("btnFace");
-            // if (data.fingerprint.includes("Đúng")) {
-            //   btnFace.disabled = false;
-            //   btnFace.style.opacity = "1";
-            //   btnFace.style.cursor = "pointer";
-            // } else {
-            //   btnFace.disabled = true;
-            //   btnFace.style.opacity = "0.5";
-            //   btnFace.style.cursor = "not-allowed";
-            // }
-
-            // === LOG ===
-            if (data.last_log) {
-              const logBox = document.getElementById("logBox");
-              logBox.innerHTML =
-                `<div class="text-muted">${data.last_log}</div>` +
-                logBox.innerHTML;
-              if (logBox.children.length > 10)
-                logBox.removeChild(logBox.lastChild);
-            }
+            // Đổi màu
+            setClass(
+              "fingerprint",
+              data.fingerprint.includes("Đúng"),
+              "ok",
+              "wait"
+            );
+            setClass("face", data.face.includes("Đúng"), "ok", "wait");
+            setClass("door", data.door === "Mở", "ok", "error");
           })
-          .catch(() => {});
+          .catch((err) => console.error("Lỗi fetch:", err));
       }
 
       function setClass(id, cond, okCls, waitCls) {
@@ -315,14 +285,8 @@
       // updateStatus();
       // === SỬA KHỞI ĐỘNG JS ===
       window.onload = function () {
-        updateStatus();
+        updateStatus(); // GỌI NGAY KHI TẢI TRANG
         setInterval(updateStatus, 500);
-
-        // ẨN NÚT MẶT KHI MỞ TRANG
-        // const btnFace = document.getElementById("btnFace");
-        // btnFace.disabled = true;
-        // btnFace.style.opacity = "0.5";
-        // btnFace.style.cursor = "not-allowed";
       };
     </script>
   </body>

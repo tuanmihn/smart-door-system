@@ -1,5 +1,6 @@
 /*
-  - Cảm biến vân tay AS608 qua Serial2 
+  ARDUINO MEGA 2560 – KHÓA CỬA 2 LỚP (2FA THẬT SỰ)
+  - Cảm biến vân tay AS608 qua Serial2 (ổn định)
   - Servo mở cửa CHỈ KHI ĐÚNG CẢ VÂN TAY + KHUÔN MẶT
   - Giao tiếp Serial (USB) với Python (bridge.py)
   - IN LOG CHI TIẾT ĐỂ DEBUG
@@ -89,11 +90,7 @@ void handleCommand(String cmd) {
         Serial.println("XÁC THỰC THÀNH CÔNG → MỞ CỬA");
         openDoor();
     } else {
-        Serial.println("FACE_MISMATCH → RESET TRẠNG THÁI");
-        // RESET DÙ SAI
-        waiting_for_face = false;
-        current_fingerprint_id = 0;
-        Serial.println("SYSTEM_RESET_MISMATCH");
+        Serial.println("FACE_MISMATCH → KHÔNG MỞ CỬA");
     }
     waiting_for_face = false;
     current_fingerprint_id = 0;
@@ -180,7 +177,7 @@ void openDoor() {
 
   // RESET HOÀN TOÀN SAU KHI ĐÓNG CỬA
   current_fingerprint_id = 0;
-  waiting_for_face = false;  
+  waiting_for_face = false;  // QUAN TRỌNG!
   Serial.println("SYSTEM_RESET_READY");
 }
 // ==============================================================

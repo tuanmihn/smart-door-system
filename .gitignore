@@ -1,1 +1,23 @@
-.vscode
+
+.vscode/
+*.code-workspace
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+known_faces/
+user_mapping.json
+
+*.log
+.env
+.DS_Store
+
+
+
+# Arduino build
+*.elf
+*.hex
+*.bin

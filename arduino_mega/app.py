@@ -74,7 +74,7 @@ reload_users()
 def check_registered_face(gray_frame):
     small = cv2.resize(gray_frame, (100, 100))
     best_name = None
-    best_score = 1.0  
+    best_score = 1.0  # SQDIFF: càng thấp càng tốt
 
     for name in status["users"]:
         path = os.path.join(KNOWN_FACES_DIR, f"{name}.jpg")
@@ -94,12 +94,12 @@ def check_registered_face(gray_frame):
             best_score = min_val
             best_name = name
 
-    # NGƯỠNG: < 0.5 = ĐÚNG
-    if best_score < 0.6:
-        print(f"[THÀNH CÔNG] {best_name}: {best_score:.3f} < 0.5")
+    # NGƯỠNG: < 0.15 = ĐÚNG
+    if best_score < 0.15:
+        print(f"[THÀNH CÔNG] {best_name}: {best_score:.3f} < 0.15")
         return best_name
 
-    print(f"[THẤT BẠI] Tốt nhất: {best_score:.3f} >= 0.5")
+    print(f"[THẤT BẠI] Tốt nhất: {best_score:.3f} >= 0.15")
     return None
 # ==============================================================
 # 6. MỞ CAMERA
